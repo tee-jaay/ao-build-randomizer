@@ -16,11 +16,20 @@ class _RandomizerState extends State<Randomizer> {
     });
   }
 
+  String _getImageUrl(int number) {
+    final random = Random();
+    final width = 200;
+    final height = 200;
+    final url =
+        'https://picsum.photos/$width/$height?n=$number&random=${random.nextInt(100)}';
+    return url;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('3x3 Randomizer'),
+        title: Text('Build Randomizer'),
       ),
       body: GridView.count(
         crossAxisCount: 3,
@@ -40,18 +49,22 @@ class _RandomizerState extends State<Randomizer> {
                 ],
               ),
               child: Center(
-                child: Text(
-                  '${_gridValues[index]}',
-                  style: TextStyle(fontSize: 32),
+                child: Image.network(
+                  _getImageUrl(_gridValues[index]),
+                  width: 160,
+                  height: 160,
                 ),
               ),
             ),
           );
         }),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _shuffleValues,
-        child: Icon(Icons.shuffle),
+      floatingActionButton: Align(
+        alignment: Alignment.bottomCenter,
+        child: FloatingActionButton(
+          onPressed: _shuffleValues,
+          child: Icon(Icons.shuffle),
+        ),
       ),
     );
   }
