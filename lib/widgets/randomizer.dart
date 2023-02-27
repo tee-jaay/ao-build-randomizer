@@ -34,8 +34,20 @@ class RandomizerState extends State<Randomizer> {
     final random = Random();
     const width = 200;
     const height = 200;
+    String collection;
+    switch (item) {
+      case 'helmet':
+        collection = 'helmets';
+        break;
+      case 'armor':
+        collection = 'armors';
+        break;
+      default:
+        collection = 'items';
+        break;
+    }
     final url =
-        'https://picsum.photos/$width/$height?item=$item&random=${random.nextInt(100)}';
+        'https://loremflickr.com/$width/$height/$collection?item=$item&random=${random.nextInt(100)}';
     print(url);
     return url;
   }
