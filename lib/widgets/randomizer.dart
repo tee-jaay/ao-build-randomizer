@@ -3,25 +3,40 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 class Randomizer extends StatefulWidget {
+  const Randomizer({super.key});
+
   @override
-  _RandomizerState createState() => _RandomizerState();
+  RandomizerState createState() => RandomizerState();
 }
 
-class _RandomizerState extends State<Randomizer> {
-  List<int> _gridValues = List.generate(9, (index) => index + 1);
+class RandomizerState extends State<Randomizer> {
+  final Map<String, String> _playerItems = {
+    'bag': '',
+    'helmet': '',
+    'shoe': '',
+    'armor': '',
+    'cape': '',
+    'mainHand': '',
+    'offHand': '',
+    'potion': '',
+    'food': '',
+  };
 
   void _shuffleValues() {
     setState(() {
-      _gridValues.shuffle();
+      _playerItems.forEach((key, value) {
+        _playerItems[key] = _getImageUrl(key);
+      });
     });
   }
 
-  String _getImageUrl(int number) {
+  String _getImageUrl(String item) {
     final random = Random();
-    final width = 200;
-    final height = 200;
+    const width = 200;
+    const height = 200;
     final url =
-        'https://picsum.photos/$width/$height?n=$number&random=${random.nextInt(100)}';
+        'https://picsum.photos/$width/$height?item=$item&random=${random.nextInt(100)}';
+    print(url);
     return url;
   }
 
@@ -29,14 +44,14 @@ class _RandomizerState extends State<Randomizer> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Build Randomizer'),
+        title: const Text('Randomizer'),
       ),
       body: GridView.count(
         crossAxisCount: 3,
-        children: List.generate(9, (index) {
+        children: _playerItems.keys.toList().map((key) {
           return GridTile(
             child: Container(
-              margin: EdgeInsets.all(8),
+              margin: const EdgeInsets.all(8),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(8),
@@ -50,20 +65,20 @@ class _RandomizerState extends State<Randomizer> {
               ),
               child: Center(
                 child: Image.network(
-                  _getImageUrl(_gridValues[index]),
+                  _getImageUrl(key),
                   width: 160,
                   height: 160,
                 ),
               ),
             ),
           );
-        }),
+        }).toList(),
       ),
       floatingActionButton: Align(
         alignment: Alignment.bottomCenter,
         child: FloatingActionButton(
           onPressed: _shuffleValues,
-          child: Icon(Icons.shuffle),
+          child: const Icon(Icons.shuffle),
         ),
       ),
     );
